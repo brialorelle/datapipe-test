@@ -7,6 +7,7 @@
     <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@2.0.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-preload@2.0.0"></script>
     <link href="https://unpkg.com/jspsych@8.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
+    <script src="https://unpkg.com/@jspsych-contrib/plugin-pipe"></script>
   </head>
   <body></body>
   <script>
@@ -17,6 +18,9 @@
         jsPsych.data.displayData();
       }
     });
+
+    const subject_id = jsPsych.randomization.randomID(10);
+    const filename = `${subject_id}.csv`;
 
     /* create timeline */
     var timeline = [];
@@ -75,6 +79,8 @@
       }
     };
 
+
+
     var test = {
       type: jsPsychImageKeyboardResponse,
       stimulus: jsPsych.timelineVariable('stimulus'),
@@ -95,7 +101,18 @@
       repetitions: 5,
       randomize_order: true
     };
+
+    const save_data = {
+          type: jsPsychPipe,
+          action: "save",
+          experiment_id: "yBFLdaMZU5iv",
+          filename: filename,
+          data_string: ()=>jsPsych.data.get().csv()
+        };
+
     timeline.push(test_procedure);
+    
+    timeline.push(save_data);
 
     /* define debrief */
     var debrief_block = {
